@@ -14,15 +14,17 @@ from functools import reduce
 
 # In[2]:
 
-sheet_id = '1IlKCUX-8SOFvZpW9o53XHIm5pdorGn-dCJ-lS1QHpnU'
+sheet_id = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 
 city_df = pd.read_html('https://worldpopulationreview.com/zips/texas')[0]
 city_df['County'] = city_df['County'].apply(lambda x: x.replace('County', ''))
 
 # In[3]:
 
-
-files_list = glob('/home/codexnow/Documents/county_pickle/*.*')
+#In case you directly have your dictionary in code, you dont have to use this piece
+#This piece of code is to read list of pickled files which represents multi-header dictionary
+#To check what dictionary looks like, check the file structure.json in main folder.
+files_list = glob('path_to_pickled_files')
 files_list.sort()
 county_city = [{x: city_df[city_df['County'].str.contains(r'\b{0}\b'.format(Path(x).stem))]} for x in files_list]
 
@@ -190,7 +192,7 @@ def write_city_to_sheet(city_wise, county_name):
 def format_sheet(sheet_name):
     data_to_find = ['150,000', '200,000', '350,000', '1-9 Years Old', '10-34 Years Old', '35+ Years Old',
                     'City Average']
-    # sheet_id = '1X5IwcuQsnfT4VCYBCHGonQeJsoPXgj6LFlWwRw75nZQ'
+
     gc = pygsheets.authorize(service_file='credentials.json')
     sh = gc.open_by_key(sheet_id)
     ws = sh.worksheet_by_title(sheet_name)
